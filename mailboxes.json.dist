@@ -1,0 +1,28 @@
+[
+  {
+    "src": {
+      "host": "src.smtp.server.tld"
+    },
+    "dst": {
+      "host": "dst.smtp.server.tld"
+    },
+    "mailboxes": [
+      {
+        "user": "john.doe@domain.tld",
+        "password": "verysecretpassword",
+        "srcUser": "",
+        "srcPassword": "",
+        "dstUser": "",
+        "dstPassword": ""
+      },
+      {
+        "user": "jane.doe@domain.tld",
+        "password": "passwordsecretvery",
+        "srcUser": "",
+        "srcPassword": "",
+        "dstUser": "",
+        "dstPassword": ""
+      }
+    ]
+  }
+]
