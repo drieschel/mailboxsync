@@ -1,3 +1,4 @@
 vendor
 var
 mailboxes*.json
+mailbox-sync

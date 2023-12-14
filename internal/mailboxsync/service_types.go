@@ -1,11 +1,24 @@
 package mailboxsync
 
-import "strconv"
+import (
+	"strconv"
+)
 
 type Sync struct {
 	Src       ImapServer `json:"src" validate:"required"`
 	Dst       ImapServer `json:"dst" validate:"required"`
 	Mailboxes []Mailbox  `json:"mailboxes" validate:"required"`
+}
+
+func (s Sync) GetActiveMailboxes() []Mailbox {
+	var mailboxes []Mailbox
+	for _, mailbox := range s.Mailboxes {
+		if mailbox.IsActive() {
+			mailboxes = append(mailboxes, mailbox)
+		}
+	}
+
+	return mailboxes
 }
 
 type ImapServer struct {
@@ -32,6 +45,7 @@ type Mailbox struct {
 	SrcUser     string `json:"srcUser"`
 	DstPassword string `json:"dstPassword"`
 	DstUser     string `json:"dstUser"`
+	Active      *bool  `json:"active" default:"true"`
 }
 
 func (m Mailbox) GetSrcUser() string {
@@ -64,4 +78,12 @@ func (m Mailbox) GetDstPassword() string {
 	}
 
 	return m.Password
+}
+
+func (m Mailbox) IsActive() bool {
+	if m.Active != nil {
+		return *m.Active
+	}
+
+	return true
 }

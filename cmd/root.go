@@ -27,12 +27,9 @@ import (
 	"os"
 )
 
-var cfgFile string
-var syncFile string
-
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "mailboxsync /file/to/syncs.json",
+	Use:   "mailbox-sync /file/to/mailboxes.json",
 	Short: "A brief description of your application",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if err := cobra.ExactArgs(1)(cmd, args); err != nil {
@@ -48,7 +45,6 @@ var rootCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 		jsonFile, err := os.Open(args[0])
-
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -68,12 +64,13 @@ var rootCmd = &cobra.Command{
 
 		validate := validator.New(validator.WithRequiredStructEnabled())
 		err = validate.Struct(syncs)
-		log.Printf("%+v", err)
 		if err != nil {
 			if _, ok := err.(*validator.InvalidValidationError); !ok {
 				log.Fatal(err)
 			}
 		}
+
+		//log.Printf("%+v", syncs)
 
 		mailboxsync.NewService().SyncMailboxes(syncs)
 	},
@@ -86,23 +83,4 @@ func Execute() {
 	if err != nil {
 		os.Exit(1)
 	}
-}
-
-func init() {
-	cobra.OnInitialize(initConfig)
-
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.mailboxsync.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
-
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-
 }

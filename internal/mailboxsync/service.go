@@ -19,7 +19,7 @@ func (s Service) SyncMailboxes(syncs []Sync) {
 	concurrentSyncs := 3
 	for _, sync := range syncs {
 		eg, ctx := errgroup.WithContext(context.Background())
-		for i, mailbox := range sync.Mailboxes {
+		for i, mailbox := range sync.GetActiveMailboxes() {
 			var args = []string{
 				"--host1", sync.Src.getHost(),
 				"--port1", sync.Src.getPort(),

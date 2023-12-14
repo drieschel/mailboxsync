@@ -25,6 +25,6 @@ RUN go install github.com/githubnemo/CompileDaemon@latest
 CMD [ \
     "CompileDaemon", \
     #"--include", ".env", \
-    "--build", "go build -ldflags=-s -o mailboxsync", \
-    "--command", "./mailboxsync ./mailboxes.json" \
+    "--build", "go build -ldflags=-s -o mailbox-sync", \
+    "--command", "./mailbox-sync ./mailboxes.json" \
 ]
