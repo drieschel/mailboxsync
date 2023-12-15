@@ -19,7 +19,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/drieschel/mailboxsync/internal/mailboxsync"
+	"github.com/drieschel/mailboxsync/internal/sync"
 	"github.com/go-playground/validator/v10"
 	"github.com/spf13/cobra"
 	"io"
@@ -27,10 +27,10 @@ import (
 	"os"
 )
 
-// rootCmd represents the base command when called without any subcommands
+var concurrentSyncs int
 var rootCmd = &cobra.Command{
 	Use:   "mailbox-sync /file/to/mailboxes.json",
-	Short: "A brief description of your application",
+	Short: "Synchronize multiple mailboxes between different servers at the same time",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if err := cobra.ExactArgs(1)(cmd, args); err != nil {
 			return err
@@ -51,7 +51,7 @@ var rootCmd = &cobra.Command{
 
 		defer jsonFile.Close()
 
-		var syncs []mailboxsync.Sync
+		var syncs []sync.Sync
 		jsonBytes, _ := io.ReadAll(jsonFile)
 		if json.Valid(jsonBytes) == false {
 			log.Fatalf("json data in file %s is not valid", args[0])
@@ -70,9 +70,7 @@ var rootCmd = &cobra.Command{
 			}
 		}
 
-		//log.Printf("%+v", syncs)
-
-		mailboxsync.NewService().SyncMailboxes(syncs)
+		sync.NewService(concurrentSyncs).SyncMailboxes(syncs)
 	},
 }
 
@@ -83,4 +81,10 @@ func Execute() {
 	if err != nil {
 		os.Exit(1)
 	}
+
+	os.Exit(0)
+}
+
+func init() {
+	rootCmd.PersistentFlags().IntVar(&concurrentSyncs, "concurrent-syncs", 3, "max amount of concurrent mailbox syncs")
 }

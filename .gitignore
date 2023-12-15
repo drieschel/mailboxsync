@@ -1,4 +1,5 @@
 vendor
-var
-mailboxes*.json
-mailbox-sync
+var/*
+!var/.gitkeep
+config/mailboxes*.json
+bin/mailboxsync

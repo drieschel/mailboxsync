@@ -20,11 +20,8 @@ RUN set -xe \
 
 WORKDIR /app
 
-RUN go install github.com/githubnemo/CompileDaemon@latest
+ADD . /app
 
-CMD [ \
-    "CompileDaemon", \
-    #"--include", ".env", \
-    "--build", "go build -ldflags=-s -o mailbox-sync", \
-    "--command", "./mailbox-sync ./mailboxes.json" \
-]
+RUN go build -o /usr/local/bin/mailboxsync
+
+CMD [ "mailboxsync", "config/mailboxes.json" ]

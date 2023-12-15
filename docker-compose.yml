@@ -1,6 +1,0 @@
-services:
-  mailboxsync:
-    container_name: app
-    build: .
-    volumes:
-      - .:/app:delegated

@@ -1,10 +1,11 @@
 [
   {
     "src": {
-      "host": "src.smtp.server.tld"
+      "host": "src.imap-server.tld"
     },
     "dst": {
-      "host": "dst.smtp.server.tld"
+      "host": "dst.imap-server.tld",
+      "port": 143
     },
     "mailboxes": [
       {
@@ -21,7 +22,8 @@
         "srcUser": "",
         "srcPassword": "",
         "dstUser": "",
-        "dstPassword": ""
+        "dstPassword": "",
+        "active": false
       }
     ]
   }

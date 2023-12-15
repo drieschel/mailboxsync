@@ -1,4 +1,4 @@
-package mailboxsync
+package sync
 
 import (
 	"strconv"
@@ -23,14 +23,14 @@ func (s Sync) GetActiveMailboxes() []Mailbox {
 
 type ImapServer struct {
 	Host string `json:"host" validate:"required"`
-	Port *int   `json:"port" default:"143"`
+	Port *int   `json:"port"`
 }
 
-func (i ImapServer) getHost() string {
+func (i ImapServer) GetHost() string {
 	return i.Host
 }
 
-func (i ImapServer) getPort() string {
+func (i ImapServer) GetPort() string {
 	if i.Port != nil {
 		return strconv.Itoa(*i.Port)
 	}
@@ -45,7 +45,7 @@ type Mailbox struct {
 	SrcUser     string `json:"srcUser"`
 	DstPassword string `json:"dstPassword"`
 	DstUser     string `json:"dstUser"`
-	Active      *bool  `json:"active" default:"true"`
+	Active      *bool  `json:"active"`
 }
 
 func (m Mailbox) GetSrcUser() string {
