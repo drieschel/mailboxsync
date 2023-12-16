@@ -24,4 +24,5 @@ ADD . /app
 
 RUN go build -o /usr/local/bin/mailboxsync
 
-CMD [ "mailboxsync", "config/mailboxes.json" ]
+ENTRYPOINT ["mailboxsync", "config/mailboxes.json"]
+CMD []

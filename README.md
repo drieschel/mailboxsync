@@ -1,6 +1,23 @@
-Mailboxsync is an easy-to-use tool to synchronize multiple mailboxes between different servers at the same time. It uses [imapsync](https://github.com/imapsync/imapsync) for the synchronization process.
+# mailboxsync
+Easy-to-use tool to synchronize multiple mailboxes at the same time. It uses [imapsync](https://github.com/imapsync/imapsync) for the synchronization process.
 
-Required server and mailbox data has to be provided in a json file
+## Usage (with Docker)
+1. Create `config/config.json` and fill it with the required data (see section below)
+2. Execute `make run`
+3. Grab a coffee :coffee: and make yourself comfortable
+
+> [!TIP]
+> 
+> You can tail the logs in `var/log` from different mailboxes during the sync
+
+> [!TIP]
+> 
+> Use the variable `CONCURRENT_SYNCS` in case you want to adjust the amount of concurrent mailbox syncs. Default is 3.
+> 
+> `make run CONCURRENT_SYNCS=5`
+
+## Mailbox JSON example
+Required server and mailbox data has to be provided in a JSON file
 ```
 [
   {
@@ -34,60 +51,37 @@ Required server and mailbox data has to be provided in a json file
 ```
 Every element in the list is a `Sync` object. A `Sync` object consists of all required data for synchronizing mailboxes between `src` and `dst`.
 
-## Usage (with Docker)
-1. Create `config/config.json` and fill it with the required data
-2. Run `make run`
-3. Make yourself comfortable and grab a coffee :coffee:
-
-> [!TIP]
-> You can tail the logs in `var/log` from different mailboxes during the sync
-
 ## Types
-
+Reference about the types which have to be defined in the JSON file. 
 ### ImapServer
 Consists of all required data to establish a connection to an IMAP server
 
-#### Properties
-**`host [string]`**
-Domain or IP of the IMAP server (**required**)
-
-**`port [integer]`**
-Port of the IMAP server (**default: 143**)
+| Name | Type    | Description                     |                  |
+|------|---------|---------------------------------|------------------|
+| host | string  | Domain or IP of the IMAP server | **Required**     |
+| port | integer | Port of the IMAP server         | **Default: 143** |
 
 ### Mailbox
-Consists of all required credentials to connect to the mailboxes which need to be synchronized
+Consists of all required credentials to connect to the mailboxes which have to be synchronized
 
-#### Properties
-**`user [string]`**
-Username for source and/or destination mailbox (**required**)
-
-**`password [string]`**
-Password for source and/or destination mailbox (**required**)
-
-**`srcUser [string]`**
-It will be used as username for the source mailbox in case it is set. Otherwise `user` will be taken.
-
-**`srcPassword [string]`**
-It will be used as password for the source mailbox in case it is set. Otherwise `password` will be taken.
-
-**`dstUser [string]`**
-It will be used as username for the destination mailbox in case it is set. Otherwise `user` will be taken.
-
-**`dstPassword [string]`**
-It will be used as password for the destination mailbox in case it is set. Otherwise `password` will be taken.
-
-**`active [boolean]`**
-In case active is false, mailbox will not get synchronized (**default: true**)
+| Name        | Type    | Description                                                                                                 |                   |
+|-------------|---------|-------------------------------------------------------------------------------------------------------------|-------------------|
+| user        | string  | Username for source and/or destination mailbox                                                              | **Required**      |
+| password    | string  | Password for source and/or destination mailbox                                                              | **Required**      |
+| srcUser     | string  | Will be used as username for the source mailbox in case it is set. Otherwise `user` will be taken.          |                   |
+| srcPassword | string  | Will be used as password for the source mailbox in case it is set. Otherwise `password` will be taken.      |                   |
+| dstUser     | string  | Will be used as username for the destination mailbox in case it is set. Otherwise `user` will be taken.     |                   |
+| dstPassword | string  | Will be used as password for the destination mailbox in case it is set. Otherwise `password` will be taken. |                   |
+| active      | boolean | De-/Activate mailbox for synchronization                                                                    | **Default: true** |
 
 ### Sync
-Contains all required data to synchronize one or more mailboxes at the same time
+Contains all required data to synchronize one or more mailboxes between two servers at the same time
 
-#### Properties
-**`src [ImapServer]`**
-Connection data for the source IMAP server (**required**)
+| Name      | Type       | Description                                                             |              |
+|-----------|------------|-------------------------------------------------------------------------|--------------|
+| src       | ImapServer | Connection data for the source IMAP server                              | **Required** |
+| dst       | ImapServer | Connection data for the destination IMAP server                         | **Required** |
+| mailboxes | Mailbox[]  | List of mailboxes which have to be synchronized between `src` and `dst` | **Required** |
 
-**`dst [ImapServer]`**
-Connection data for the destination IMAP server (**required**)
-
-**`mailboxes [Mailbox[]]`**
-List of mailboxes which have to be synchronized between `src` and `dst` (**required**)
+## Misc
+In case you miss an option from [imapsync](https://github.com/imapsync/imapsync) or a specific feature, don't hesitate to create an [issue](https://github.com/drieschel/mailboxsync/issues) or a PR.  
