@@ -2,7 +2,7 @@
 Easy-to-use tool to synchronize multiple mailboxes at the same time. It uses [imapsync](https://github.com/imapsync/imapsync) for the synchronization process.
 
 ## Usage (with Docker)
-1. Create `config/config.json` and fill it with the required data (see section below)
+1. Create `config/mailboxes.json` and fill it with the required data (see section below)
 2. Execute `make run`
 3. Grab a coffee :coffee: and make yourself comfortable
 
